@@ -41,7 +41,7 @@ public class HashingUtility{
 
     public static byte[] getArgon2HashBytes (String a){
         Argon2 argon2 = Argon2Factory.create();
-        String hash =  argon2.hash(2, 65536, 1, a);
+        String hash =  argon2.hashRaw(3, 12, 1, a);
         return hash.getBytes();
     }
 

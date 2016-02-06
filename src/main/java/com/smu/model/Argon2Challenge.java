@@ -40,7 +40,7 @@ public class Argon2Challenge extends Challenge {
                 if(!solvable){
                     b.incrementNonce();
                 } else{
-                    System.out.println(HashingUtility.getArgon2HashBytes(serializedBlock));
+                    System.out.println(new String(HashingUtility.getArgon2HashBytes(serializedBlock), "ASCII"));
                     System.out.println("Solved! Winning block: " + serializedBlock);
                 }
             } while(!solvable);

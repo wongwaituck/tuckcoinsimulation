@@ -9,7 +9,7 @@ public class ChallengeFactory {
             case "SHA-256":
                 return new SHA256Challenge(difficulty);
             case "Argon2":
-                return new SHA256Challenge(difficulty);
+                return new Argon2Challenge(difficulty);
             default:
                 return new SHA256Challenge(difficulty);
         }

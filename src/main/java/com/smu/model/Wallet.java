@@ -18,4 +18,7 @@ public class Wallet implements Serializable{
         this.ownersKey = ownersKey;
     }
 
+    public String getName() {
+        return ownerName;
+    }
 }

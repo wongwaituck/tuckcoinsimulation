@@ -5,9 +5,11 @@ package com.smu.model;
  */
 public abstract class Challenge implements Runnable{
     private int difficulty; //number of MSB bits that have to be zero
+    private Block b; //block to enter into the blockchain
 
-    public Challenge(int difficulty){
+    public Challenge(int difficulty, Block b){
         this.difficulty = difficulty;
+        this.b = b;
     }
 
     public int getDifficulty(){

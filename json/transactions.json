@@ -1,18 +1,11 @@
 {
-  "status": "200",
-  "transactions": [
-    {
-      "fromWallet": {
-        "ownerName": "alice",
-        "ownerKey": "abcdef"
-      },
-      "toWallet": {
-        "ownerName": "bob",
-        "ownerKey": "defeg"
-
-      },
-      "amount": 20.0
-    }
-
-  ]
+  "fromWallet": {
+    "ownerName": "alice",
+    "ownerKey": "abcdef"
+  },
+  "toWallet": {
+    "ownerName": "bob",
+    "ownerKey": "defeg"
+  },
+  "amount": 20.0
 }

@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class Wallet implements Serializable{
     private String ownerName;
-    private String ownersKey;
+    private String ownerKey;
 
     public Wallet(String ownerName){
         this(ownerName, HashingUtility.getSHA256Hash(HashingUtility.saltString(ownerName)));
@@ -15,10 +15,18 @@ public class Wallet implements Serializable{
 
     public Wallet(String ownerName, String ownersKey) {
         this.ownerName = ownerName;
-        this.ownersKey = ownersKey;
+        this.ownerKey = ownersKey;
     }
 
     public String getName() {
         return ownerName;
+    }
+
+    public boolean equals(Object obj){
+        if(obj instanceof Wallet){
+            Wallet other = (Wallet) obj;
+            return ownerName.equals(other.ownerName) && ownerKey.equals(other.ownerKey);
+        }
+        return false;
     }
 }

@@ -6,14 +6,14 @@ import java.io.IOException;
  * Created by WaiTuck on 06/02/2016.
  */
 public class Argon2Challenge extends Challenge {
-    public Argon2Challenge(int difficulty) {
-        super(difficulty);
+    public Argon2Challenge(int difficulty, Block b) {
+        super(difficulty, b);
     }
 
     @Override
     protected void solveChallenge() {
         //get dummy block
-        Block b = Block.getDummyBlock();
+        Block b = this.getBlock();
         //serialize
         try {
             boolean solvable;

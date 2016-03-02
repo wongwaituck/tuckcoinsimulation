@@ -6,13 +6,14 @@ import java.io.Serializable;
  * Created by WaiTuck on 06/02/2016.
  */
 public class Transaction implements Serializable{
-    private Wallet from;
-    private Wallet to;
+    private String _id;
+    private Wallet fromWallet;
+    private Wallet toWallet;
     private long amount;
 
-    public Transaction(Wallet from, Wallet to, long amount){
-        this.from = from;
-        this.to = to;
+    public Transaction(Wallet fromWallet, Wallet toWallet, long amount){
+        this.fromWallet = fromWallet;
+        this.toWallet = toWallet;
         this.amount = amount;
     }
 
@@ -20,5 +21,13 @@ public class Transaction implements Serializable{
         Wallet alice = new Wallet("alice");
         Wallet bob = new Wallet("bob");
         return new Transaction(alice, bob, 100);
+    }
+
+    public boolean equals(Object obj){
+        if(obj instanceof Transaction){
+            Transaction otherTx = (Transaction) obj;
+            return otherTx.fromWallet.equals(fromWallet) && otherTx.toWallet.equals(toWallet) && amount == otherTx.amount;
+        }
+        return false;
     }
 }

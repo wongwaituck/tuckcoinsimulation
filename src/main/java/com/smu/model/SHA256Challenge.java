@@ -1,5 +1,7 @@
 package com.smu.model;
 
+import com.smu.StateStorage;
+
 import java.io.IOException;
 
 /**
@@ -7,14 +9,15 @@ import java.io.IOException;
  */
 public class SHA256Challenge extends Challenge{
 
-    public SHA256Challenge(int difficulty) {
-        super(difficulty);
+    public SHA256Challenge(int difficulty, Block b) {
+        super(difficulty, b);
     }
 
     @Override
     protected void solveChallenge() {
         //get dummy block
-        Block b = Block.getDummyBlock();
+        Block b = this.getBlock();
+
         //serialize
         try {
             boolean solvable;

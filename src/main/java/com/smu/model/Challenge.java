@@ -1,5 +1,8 @@
 package com.smu.model;
 
+import com.smu.StateStorage;
+import com.smu.network.SubmitBlockHTTPRequest;
+
 /**
  * Created by WaiTuck on 06/02/2016.
  */
@@ -10,6 +13,7 @@ public abstract class Challenge implements Runnable{
     public Challenge(int difficulty, Block b){
         this.difficulty = difficulty;
         this.b = b;
+        b.addWinningMiner(StateStorage.getInstance().getWallet());
     }
 
     public int getDifficulty(){
@@ -20,10 +24,17 @@ public abstract class Challenge implements Runnable{
     public void run() {
         long startTime = System.nanoTime();
         solveChallenge();
-        System.out.println("Difficulty: " + difficulty);
+        System.out.println("CONGRATURATIONS, you have won 25 TUCKCOINS. SUCH MONEY!");
         System.out.println("Challenge Solved in " + (System.nanoTime() - startTime));
+        //send block to verified
+        new Thread(new SubmitBlockHTTPRequest(b)).run();
+        //remove from currenttx
+        StateStorage.getInstance().setCurrentTx(null);
     }
 
     protected abstract void solveChallenge();
 
+    public Block getBlock(){
+        return b;
+    }
 }

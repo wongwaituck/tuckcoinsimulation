@@ -3,6 +3,7 @@ package com.smu.view;
 import com.smu.StateStorage;
 import com.smu.model.Challenge;
 import com.smu.model.ChallengeFactory;
+import com.smu.network.Poller;
 import com.sun.corba.se.spi.orbutil.fsm.Input;
 
 import java.util.InputMismatchException;
@@ -68,7 +69,11 @@ public class App {
         StateStorage ss = StateStorage.getInstance();
         System.out.printf("Welcome %s!\n", ss.getName());
         System.out.println("Select the following options: ");
-        System.out.println("1. Enable Mining ");
+        if(!ss.isMining()) {
+            System.out.println("1. Enable Mining ");
+        } else {
+            System.out.println("1. Disable Mining ");
+        }
         if(!ss.isEvilMode()) {
             System.out.println("2. Enable Evil Mode ");
         } else {
@@ -78,8 +83,11 @@ public class App {
 
         switch(option){
             case 1:
+                StateStorage.getInstance().toggleMining();
+                Poller.startPollingTransactions();
                 break;
             case 2:
+                StateStorage.getInstance().toggleEvilMode();
                 break;
             default:
                 break;

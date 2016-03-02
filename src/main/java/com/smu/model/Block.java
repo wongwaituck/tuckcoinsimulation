@@ -10,11 +10,12 @@ import java.util.List;
  * Created by WaiTuck on 06/02/2016.
  */
 public class Block implements Serializable {
-    private List<Transaction> t;
+    //private byte[] prevBlockHash;
+    private List<Transaction> transactions;
     private BigInteger nonce;
 
-    public Block(List<Transaction> t) {
-        this.t = t;
+    public Block(List<Transaction> transactions) {
+        this.transactions = transactions;
         nonce = BigInteger.ZERO;
     }
 
@@ -51,6 +52,10 @@ public class Block implements Serializable {
         Object o = ois.readObject();
         ois.close();
         return (Block) o;
+    }
+
+    public void addWinningMiner(Wallet w){
+        transactions.add(0, new Transaction(null, w, 25));
     }
 
 }

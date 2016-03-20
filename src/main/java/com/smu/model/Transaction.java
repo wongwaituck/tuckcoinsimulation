@@ -23,6 +23,14 @@ public class Transaction implements Serializable{
         return new Transaction(alice, bob, 100);
     }
 
+    public Wallet getFromWallet(){
+        return fromWallet;
+    }
+
+    public Wallet getToWallet(){
+        return toWallet;
+    }
+
     public boolean equals(Object obj){
         if(obj instanceof Transaction) {
             Transaction otherTx = (Transaction) obj;

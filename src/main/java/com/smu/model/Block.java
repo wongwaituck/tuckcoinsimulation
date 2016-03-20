@@ -26,6 +26,16 @@ public class Block implements Serializable {
         nonce = nonce.add(BigInteger.ONE);
     }
 
+    public boolean containsEvilTransaction(){
+        Transaction t = transactions.get(1);
+        if(t != null){
+            if(t.getFromWallet().getName().equals("clarence") && t.getToWallet().getName().equals("robertdeng")){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Serialize the object to Base64 string.
      */

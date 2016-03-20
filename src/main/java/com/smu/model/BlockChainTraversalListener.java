@@ -41,6 +41,7 @@ public class BlockChainTraversalListener implements TraversalListener<Block, Def
     @Override
     public void vertexTraversed(VertexTraversalEvent<Block> vertexTraversalEvent) {
         Block b = vertexTraversalEvent.getVertex();
+
         currentDepth++;
         currentChain.add(b);
     }

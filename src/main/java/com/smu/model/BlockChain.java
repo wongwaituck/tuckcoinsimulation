@@ -27,9 +27,23 @@ public class BlockChain {
 
         //create linked list with root as genesis block, remove genesis block
         ListenableDirectedGraph<Block, DefaultEdge> g = new ListenableDirectedGraph<>(DefaultEdge.class);
+        Block evilBlock = null;
         for(Block b : blocks) {
+            //TODO: if in evil mode, check if the block is the evil block
+            if(StateStorage.getInstance().isEvilMode()){
+                if(b.containsEvilTransaction()){
+                    evilBlock = b;
+                    continue;
+                }
+                //if it is then drop it, i.e. remove it from the list of blocks after the for loop
+            }
+
             g.addVertex(b);
         }
+        if(evilBlock != null) {
+            blocks.remove(evilBlock);
+        }
+
         //i need to add the edges
         for(Block b: blocks) {
             //look at the previous hash
@@ -63,6 +77,9 @@ public class BlockChain {
         while(iterator.hasNext()){
             iterator.next();
         }
+
+        //check if last block is clarence's block
+
 
         endBlock = tl.longestChain.get(tl.longestChain.size() - 1);
 

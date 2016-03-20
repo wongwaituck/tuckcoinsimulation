@@ -19,48 +19,50 @@ import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by WaiTuck on 02/03/2016.
  */
 public class TransactionHTTPRequest extends HTTPRequest {
-    private static final String TRANSACTION_URL = "http://127.0.0.1:3000/methods/transaction";
+    private static final String TRANSACTION_URL = BASE_URL + "/methods/transaction";
+
+    public void poll(){
+        try {
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost(
+                    TRANSACTION_URL);
+            CloseableHttpResponse response = httpclient.execute(httpPost);
+            try {
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    // do something useful
+                    Gson gson = new GsonBuilder().create();
+                    ContentType contentType = ContentType.getOrDefault(entity);
+                    Charset charset = contentType.getCharset();
+                    String jsonString = IOUtility.convertStreamToString(entity.getContent());
+                    Transaction transaction = gson.fromJson(jsonString, Transaction.class);
+                    handleTransaction(transaction);
+                }
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+            } finally {
+                response.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
 
     @Override
     public void run() {
-        while(true) {
-            try {
-                CloseableHttpClient httpclient = HttpClients.createDefault();
-                HttpPost httpPost = new HttpPost(
-                        TRANSACTION_URL);
-                CloseableHttpResponse response = httpclient.execute(httpPost);
-                try {
-                    HttpEntity entity = response.getEntity();
-                    if (entity != null) {
-                        // do something useful
-                        Gson gson = new GsonBuilder().create();
-                        ContentType contentType = ContentType.getOrDefault(entity);
-                        Charset charset = contentType.getCharset();
-                        String jsonString = IOUtility.convertStreamToString(entity.getContent());
-                        Transaction transaction = gson.fromJson(jsonString, Transaction.class);
-                        handleTransaction(transaction);
-                    }
-                } catch (JsonSyntaxException e) {
-                    e.printStackTrace();
-                } finally {
-                    response.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                Thread.sleep(Poller.INTERVAL);
-            } catch (InterruptedException e){
-            }
-        }
+        poll();
     }
 
-    private void handleTransaction(Transaction transaction){
+    private synchronized void handleTransaction(Transaction transaction){
         if(transaction == null){
             return;
         }
@@ -70,7 +72,9 @@ public class TransactionHTTPRequest extends HTTPRequest {
         if(currentTx == null || !currentTx.equals(transaction)){
             if(currentTx != null){
                 Thread currentMiningThread = StateStorage.getInstance().getMiningThread();
-                currentMiningThread.interrupt();
+                if(currentMiningThread != null) {
+                    currentMiningThread.interrupt();
+                }
             }
             //work on new transaction
             Challenge c = ChallengeFactory.getChallenge(ChallengeFactory.ChallengeTypes.SHA256, 15, transaction);

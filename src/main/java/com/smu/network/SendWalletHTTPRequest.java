@@ -2,6 +2,7 @@ package com.smu.network;
 
 import com.google.gson.Gson;
 import com.smu.model.Block;
+import com.smu.model.Wallet;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -11,15 +12,14 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.IOException;
 
 /**
- * Created by WaiTuck on 03/03/2016.
+ * Created by WaiTuck on 16/03/2016.
  */
-public class SubmitBlockHTTPRequest extends HTTPRequest {
-    private static final String SUBMIT_BLOCK_URL = BASE_URL + "/methods/submitBlock";
-    private Block winningBlock;
+public class SendWalletHTTPRequest extends HTTPRequest {
+    private static final String ADD_WALLET_URL = BASE_URL + "/methods/addWallet";
+    private Wallet wallet;
 
-
-    public SubmitBlockHTTPRequest(Block winningBlock){
-        this.winningBlock = winningBlock;
+    public SendWalletHTTPRequest(Wallet wallet){
+        this.wallet = wallet;
     }
 
     @Override
@@ -27,13 +27,15 @@ public class SubmitBlockHTTPRequest extends HTTPRequest {
         try {
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(
-                    SUBMIT_BLOCK_URL);
+                    ADD_WALLET_URL);
             Gson gson = new Gson();
-            StringEntity postBody = new StringEntity(gson.toJson(winningBlock));
+            StringEntity postBody = new StringEntity(gson.toJson(wallet));
 
             httpPost.setEntity(postBody);
             httpPost.setHeader("Content-type", "application/json");
             CloseableHttpResponse response = httpclient.execute(httpPost);
+
+
         } catch (IOException e){
             e.printStackTrace();
         }

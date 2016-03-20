@@ -45,6 +45,12 @@ public class HashingUtility{
         return hash.getBytes();
     }
 
+    public static byte[] getArgon2HashBytes (String a, int memory){
+        Argon2 argon2 = Argon2Factory.create();
+        String hash =  argon2.hashRaw(3, memory, 1, a);
+        return hash.getBytes();
+    }
+
     public static String saltString(String a){
         //generate random UUID
         return a + UUID.randomUUID().toString();

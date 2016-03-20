@@ -23,7 +23,8 @@ public class ChallengeFactory {
     public static Challenge getChallenge(ChallengeTypes type, int difficulty, Transaction tx){
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(tx);
-        Block b = new Block(transactions);
+        Block b = new Block(BlockChain.getEndBlock().getCurrentHash(), transactions);
+
         switch(type.getType()){
             case "SHA-256":
                 return new SHA256Challenge(difficulty, b);

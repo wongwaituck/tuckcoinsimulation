@@ -3,6 +3,7 @@ package com.smu.view;
 import com.smu.StateStorage;
 import com.smu.model.Challenge;
 import com.smu.model.ChallengeFactory;
+import com.smu.network.GoOnlineHTTPRequest;
 import com.smu.network.Poller;
 import com.sun.corba.se.spi.orbutil.fsm.Input;
 
@@ -17,6 +18,8 @@ public class App {
         clearScreen();
         showSplashScreen();
         enterName();
+        printName();
+        initialize();
         getOptions();
         /*
         System.out.println("Running 10 sha-256 challenges");
@@ -34,11 +37,17 @@ public class App {
 
     }
 
+    private static void initialize() {
+        StateStorage ss = StateStorage.getInstance();
+        Poller.startPollingBlocks();
+    }
+
     public static void enterName(){
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter your name: ");
         String name = sc.nextLine();
         StateStorage.getInstance().setWallet(name);
+        new Thread(new GoOnlineHTTPRequest(StateStorage.getInstance().getWallet())).run();
     }
 
 
@@ -65,9 +74,14 @@ public class App {
                         "░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▀▀░░░░░░░░");
         System.out.println("Welcome to TuckCoin!");
     }
-    public static void getOptions(){
+
+    public static void printName(){
         StateStorage ss = StateStorage.getInstance();
         System.out.printf("Welcome %s!\n", ss.getName());
+    }
+
+    public static void getOptions(){
+        StateStorage ss = StateStorage.getInstance();
         System.out.println("Select the following options: ");
         if(!ss.isMining()) {
             System.out.println("1. Enable Mining ");
@@ -75,23 +89,32 @@ public class App {
             System.out.println("1. Disable Mining ");
         }
         if(!ss.isEvilMode()) {
-            System.out.println("2. Enable Evil Mode ");
+            System.out.println("2. Activate Moriarty Mode ");
         } else {
-            System.out.println("2. Disable Evil Mode ");
+            System.out.println("2. Disable Moriarty Mode ");
         }
+        System.out.println("3. Quit ");
         int option = readOptions();
 
         switch(option){
             case 1:
-                StateStorage.getInstance().toggleMining();
-                Poller.startPollingTransactions();
+                ss.toggleMining();
+                if(ss.isMining()) {
+                    Poller.startPollingTransactions();
+                } else {
+                    Poller.stopPollingTransactions();
+                }
                 break;
             case 2:
-                StateStorage.getInstance().toggleEvilMode();
+                ss.toggleEvilMode();
+                break;
+            case 3:
+                ss.quit();
                 break;
             default:
                 break;
         }
+        getOptions();
     }
 
     public static int readOptions(){
@@ -111,9 +134,6 @@ public class App {
         return options;
     }
 
-    public static void startMiningThread(){
-
-    }
 
     public static void clearScreen(){
         System.out.print("\033[H\033[2J");

@@ -10,19 +10,16 @@ import java.util.List;
  * Created by WaiTuck on 06/02/2016.
  */
 public class Block implements Serializable {
-    //private byte[] prevBlockHash;
+    private String previousHash;
+    private String date;
     private List<Transaction> transactions;
     private BigInteger nonce;
+    private String outputHash;
 
-    public Block(List<Transaction> transactions) {
+    public Block(String previousHash, List<Transaction> transactions) {
+        this.previousHash = previousHash;
         this.transactions = transactions;
         nonce = BigInteger.ZERO;
-    }
-
-    public static Block getDummyBlock() {
-        List<Transaction> transactions = new ArrayList<>();
-        transactions.add(Transaction.getDummyTransaction());
-        return new Block(transactions);
     }
 
     public void incrementNonce() {
@@ -40,6 +37,14 @@ public class Block implements Serializable {
         return Base64.getEncoder().encodeToString(baos.toByteArray());
     }
 
+    public String getPreviousHash(){
+        return previousHash;
+    }
+
+
+    public String getCurrentHash(){
+        return outputHash;
+    }
 
     /**
      * Read the object from Base64 string.
@@ -57,5 +62,19 @@ public class Block implements Serializable {
     public void addWinningMiner(Wallet w){
         transactions.add(0, new Transaction(null, w, 25));
     }
+
+    public void setCurrentHash(String hash){
+        this.outputHash = hash;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof Block){
+            Block b = (Block) o;
+            return b.transactions.equals(this.transactions) && b.nonce.equals(this.nonce);
+        }
+        return false;
+    }
+
 
 }

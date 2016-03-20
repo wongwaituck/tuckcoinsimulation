@@ -24,9 +24,13 @@ public class Transaction implements Serializable{
     }
 
     public boolean equals(Object obj){
-        if(obj instanceof Transaction){
+        if(obj instanceof Transaction) {
             Transaction otherTx = (Transaction) obj;
-            return otherTx.fromWallet.equals(fromWallet) && otherTx.toWallet.equals(toWallet) && amount == otherTx.amount;
+            if (fromWallet != null) {
+                return otherTx.fromWallet.equals(fromWallet) && otherTx.toWallet.equals(toWallet) && amount == otherTx.amount;
+            } else if (fromWallet == otherTx.fromWallet){
+                return otherTx.toWallet.equals(toWallet) && amount == otherTx.amount;
+            }
         }
         return false;
     }

@@ -44,7 +44,9 @@ public class SHA256Challenge extends Challenge{
                 if(!solvable){
                     b.incrementNonce();
                 } else{
-                    System.out.println(HashingUtility.getSHA256Hash(serializedBlock));
+                    String winningHash = HashingUtility.getSHA256Hash(serializedBlock);
+                    System.out.println(winningHash);
+                    b.setCurrentHash(winningHash);
                     System.out.println("Solved! Winning block: " + serializedBlock);
                 }
             } while(!solvable);

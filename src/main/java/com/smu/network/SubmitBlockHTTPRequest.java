@@ -35,7 +35,7 @@ public class SubmitBlockHTTPRequest extends HTTPRequest {
             httpPost.setHeader("Content-type", "application/json");
             CloseableHttpResponse response = httpclient.execute(httpPost);
         } catch (IOException e){
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }

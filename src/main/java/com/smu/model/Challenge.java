@@ -1,6 +1,7 @@
 package com.smu.model;
 
 import com.smu.StateStorage;
+import com.smu.network.BlocksHTTPRequest;
 import com.smu.network.SubmitBlockHTTPRequest;
 
 /**
@@ -24,8 +25,9 @@ public abstract class Challenge implements Runnable{
     public void run() {
         long startTime = System.nanoTime();
         solveChallenge();
-        System.out.println("CONGRATURATIONS, you have won 25 TUCKCOINS. SUCH MONEY!");
-        System.out.println("Challenge Solved in " + (System.nanoTime() - startTime));
+        System.out.println("CONGRATURATIONS, you have won 25 Bitcoins! SUCH MONEY!");
+
+        new BlocksHTTPRequest().run();
         //send block to verified
         new Thread(new SubmitBlockHTTPRequest(b)).run();
         //remove from currenttx

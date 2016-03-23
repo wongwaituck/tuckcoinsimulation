@@ -36,7 +36,7 @@ public class StartMiningHTTPRequest extends HTTPRequest{
 
 
         } catch (IOException e){
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 }

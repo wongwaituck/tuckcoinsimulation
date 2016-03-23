@@ -1,5 +1,7 @@
 package com.smu.model;
 
+import com.smu.network.BlocksHTTPRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class ChallengeFactory {
     public static Challenge getChallenge(ChallengeTypes type, int difficulty, Transaction tx){
         List<Transaction> transactions = new ArrayList<>();
         transactions.add(tx);
+        new BlocksHTTPRequest().run();
         Block b = new Block(BlockChain.getEndBlock().getCurrentHash(), transactions);
 
         switch(type.getType()){

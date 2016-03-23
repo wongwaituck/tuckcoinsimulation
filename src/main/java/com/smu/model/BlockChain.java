@@ -1,6 +1,7 @@
 package com.smu.model;
 
 import com.smu.StateStorage;
+import com.smu.network.SubmitNameCashHTTPRequest;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.event.ConnectedComponentTraversalEvent;
 import org.jgrapht.event.EdgeTraversalEvent;
@@ -12,6 +13,7 @@ import org.jgrapht.graph.ListenableDirectedGraph;
 import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -19,7 +21,7 @@ import java.util.List;
  */
 public class BlockChain {
     private static Block endBlock;
-
+    public static HashMap<String, Long> nameCash = new HashMap<>();
 
     public static void parseBlocks(){
         //retrieve blocks
@@ -78,10 +80,13 @@ public class BlockChain {
             iterator.next();
         }
 
-        //check if last block is clarence's block
-
-
         endBlock = tl.longestChain.get(tl.longestChain.size() - 1);
+
+        if(StateStorage.adminMode) {
+            nameCash = new HashMap<>();
+            parseLongestChain(tl.longestChain);
+            new SubmitNameCashHTTPRequest().run();
+        }
 
         StateStorage.getInstance().setVerifiedBlockChain(tl.longestChain);
     }
@@ -90,6 +95,32 @@ public class BlockChain {
         return endBlock;
     }
 
+    private static void parseLongestChain(List<Block> blocks){
+        for(Block b : blocks){
+            List<Transaction> transactions = b.getTransactions();
+            for(Transaction t: transactions){
+                Wallet fromWallet = t.getFromWallet();
+                Wallet toWallet = t.getToWallet();
+                long amount = t.getAmount();
 
+                if(fromWallet == null){
+                    updateNameCash(toWallet.getName(), amount);
+                } else{
+                    updateNameCash(fromWallet.getName(), -amount);
+                    updateNameCash(toWallet.getName(), amount);
+                }
+            }
+        }
+    }
+
+    private static void updateNameCash(String name, long amount){
+        if(nameCash.containsKey(name)){
+            long currAmount = nameCash.get(name);
+            long updatedAmount = currAmount + amount;
+            nameCash.put(name, updatedAmount);
+        } else {
+            nameCash.put(name, amount);
+        }
+    }
 
 }

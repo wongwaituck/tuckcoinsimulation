@@ -17,6 +17,10 @@ public class Transaction implements Serializable{
         this.amount = amount;
     }
 
+    public long getAmount(){
+        return amount;
+    }
+
     public static Transaction getDummyTransaction(){
         Wallet alice = new Wallet("alice");
         Wallet bob = new Wallet("bob");

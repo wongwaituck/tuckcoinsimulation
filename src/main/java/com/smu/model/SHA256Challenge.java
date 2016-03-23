@@ -1,6 +1,7 @@
 package com.smu.model;
 
 import com.smu.StateStorage;
+import com.smu.view.App;
 
 import java.io.IOException;
 
@@ -40,15 +41,18 @@ public class SHA256Challenge extends Challenge{
                         }
                     }
                 }
-
+                //App.clearScreen();
+                //System.out.println("Trying Hash:");
+                System.out.println(HashingUtility.getSHA256Hash(serializedBlock));
                 if(!solvable){
                     b.incrementNonce();
                 } else{
+
                     String winningHash = HashingUtility.getSHA256Hash(serializedBlock);
-                    System.out.println(winningHash);
+                    //System.out.println(winningHash);
                     b.setCurrentHash(winningHash);
-                    System.out.println("Solved! Winning block: " + serializedBlock);
                 }
+                System.out.println("Press 1 and enter to stop mining");
             } while(!solvable);
 
         } catch (IOException e) {

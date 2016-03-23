@@ -55,7 +55,7 @@ public class BlocksHTTPRequest extends HTTPRequest {
                 response.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
     }

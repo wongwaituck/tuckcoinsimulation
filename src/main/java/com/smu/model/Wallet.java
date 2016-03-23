@@ -10,7 +10,7 @@ public class Wallet implements Serializable{
     private String ownerKey;
 
     public Wallet(String ownerName){
-        this(ownerName, HashingUtility.getSHA256Hash(HashingUtility.saltString(ownerName)));
+        this(ownerName, HashingUtility.getSHA256Hash(ownerName));
     }
 
     public Wallet(String ownerName, String ownersKey) {

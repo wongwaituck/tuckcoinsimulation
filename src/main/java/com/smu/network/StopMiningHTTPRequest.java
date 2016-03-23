@@ -36,7 +36,7 @@ public class StopMiningHTTPRequest extends HTTPRequest {
 
 
         } catch (IOException e){
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 }

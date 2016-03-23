@@ -64,6 +64,13 @@ public class TransactionHTTPRequest extends HTTPRequest {
 
     private synchronized void handleTransaction(Transaction transaction){
         if(transaction == null){
+            Transaction currentTx = StateStorage.getInstance().getCurrentTx();
+                if (currentTx != null) {
+                    Thread currentMiningThread = StateStorage.getInstance().getMiningThread();
+                    if (currentMiningThread != null) {
+                        currentMiningThread.interrupt();
+                    }
+                }
             return;
         }
         //get current working tx

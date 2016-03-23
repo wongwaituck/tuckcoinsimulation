@@ -36,7 +36,7 @@ public class GoOfflineHTTPRequest extends HTTPRequest {
 
 
         } catch (IOException e){
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 }

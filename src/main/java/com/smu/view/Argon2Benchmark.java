@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Argon2Benchmark {
     public static  long count = 0;
-    public static void main(String[] args) throws InterruptedException {
+    public static void  notMain(String[] args) throws InterruptedException {
         //create 8 threads
         new Thread(new Argon2BenchmarkThread(4096000)).start();
 

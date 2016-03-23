@@ -22,6 +22,10 @@ public class Block implements Serializable {
         nonce = BigInteger.ZERO;
     }
 
+    public List<Transaction> getTransactions(){
+        return transactions;
+    }
+
     public void incrementNonce() {
         nonce = nonce.add(BigInteger.ONE);
     }
@@ -29,7 +33,10 @@ public class Block implements Serializable {
     public boolean containsEvilTransaction(){
         Transaction t = transactions.get(1);
         if(t != null){
-            if(t.getFromWallet().getName().equals("clarence") && t.getToWallet().getName().equals("robertdeng")){
+
+            if(t.getFromWallet() != null && t.getToWallet() != null &&
+                    t.getFromWallet().getName().equalsIgnoreCase("moriarty") &&
+                    t.getToWallet().getName().equalsIgnoreCase("professorR")){
                 return true;
             }
         }

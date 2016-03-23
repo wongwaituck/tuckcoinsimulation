@@ -17,7 +17,7 @@ public class Poller {
                 .newSingleThreadScheduledExecutor();
         service.scheduleAtFixedRate(new TransactionHTTPRequest(), 0, INTERVAL, TimeUnit.SECONDS);
         StateStorage.getInstance().setTransactionService(service);
-        new Thread(new StartMiningHTTPRequest(StateStorage.getInstance().getWallet())).run();
+        new Thread(new StartMiningHTTPRequest(StateStorage.getInstance().getWallet())).start();
     }
 
     public synchronized static void stopPollingTransactions(){
@@ -33,7 +33,6 @@ public class Poller {
     public static void startPollingBlocks(){
         ScheduledExecutorService service = Executors
                 .newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(new BlocksHTTPRequest(), 0, INTERVAL, TimeUnit.SECONDS);
-        StateStorage.getInstance().setTransactionService(service);
+        service.scheduleAtFixedRate(new BlocksHTTPRequest(), 0, INTERVAL*250, TimeUnit.MILLISECONDS);
     }
 }

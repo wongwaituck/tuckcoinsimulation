@@ -26,6 +26,7 @@ public class StateStorage {
     private Thread verfiedChainThread;
     private List<Block> blocks;
     private List<Block> verifiedBlockChain;
+    public static boolean adminMode = false;
 
     private StateStorage(){}
 
